@@ -52,13 +52,24 @@ namespace Final.Services
 
         }
 
-        public async Task DeleteComment(int id)
+        public async Task DeleteComment(int id,string userId)
         {
+            
+            var comment = await CommentRepository.GetSingleComment(id);
+            if(userId != comment.UserId)
+            {
+                throw new Exception("Cannot Delete Comment");
+            }
             await CommentRepository.DeleteComment(id);
         }
 
-        public async Task DeletePost(int id)
+        public async Task DeletePost(int id, string userId)
         {
+            var post = await PostRepository.GetSinglePost(id);
+            if(userId != post.CreatorId)
+            {
+                throw new Exception("Cannot Delete Post");
+            }
             await PostRepository.DeletePost(id);
         }
 
@@ -85,27 +96,35 @@ namespace Final.Services
 
         }
 
-        public async Task UpdateComment(UpdateCommentDto commentDto)
+        public async Task UpdateComment(UpdateCommentDto commentDto, string userId)
         {
+            
             var post = (await PostRepository.GetSinglePost(commentDto.PostID));
             if (post.Status == EStatus.Inactive)
             {
                 throw new Exception("You cant update inactive post");
             }
+           
             var user = await _userManager.FindByIdAsync(commentDto.UserId);
 
             if (post != null)
             {
+                var comm =  await CommentRepository.GetSingleComment(commentDto.Id);
                 var comment = _mapper.Map<Comment>(commentDto);
                 comment.Post = post;
                 comment.User = user;
+                if (userId != comm.UserId)
+                {
+                    throw new Exception("You cant update this comment");
+                }
 
                 await CommentRepository.UpdateComment(comment);
-            }
 
+            }
+           
 
         }
-        public async Task UpdatePost(UpdatePostDto postDto)
+        public async Task UpdatePost(UpdatePostDto postDto, string userId)
         {
             var user = await _userManager.FindByIdAsync(postDto.CreatorId);
             var post = (await PostRepository.GetSinglePost(postDto.Id));
@@ -117,6 +136,10 @@ namespace Final.Services
             {
                 throw new Exception("You can only update your post");
 
+            }
+            if(userId!= post.CreatorId)
+            {
+                throw new Exception("You cant update this post");
             }
             post.Name = postDto.Name;
             post.Content = postDto.Content;

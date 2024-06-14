@@ -4,6 +4,7 @@ using Final.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Final.Controllers
 {
@@ -39,7 +40,8 @@ namespace Final.Controllers
 
         public async Task<IActionResult> DeletePost(int id)
         {
-            await _postService.DeletePost(id);
+            var a = User.Claims.FirstOrDefault(x => x.Type == "UserId").Value.ToString();
+            await _postService.DeletePost(id,a);
             return Ok();
         }
 
@@ -48,7 +50,8 @@ namespace Final.Controllers
 
         public async Task<IActionResult> UpdatePost(UpdatePostDto updatePostDto)
         {
-            await _postService.UpdatePost(updatePostDto);
+            var a = User.Claims.FirstOrDefault(x => x.Type == "UserId").Value.ToString();
+            await _postService.UpdatePost(updatePostDto,a);
             return Ok();
         }
 
@@ -66,7 +69,8 @@ namespace Final.Controllers
 
         public async Task<IActionResult> EditComment(UpdateCommentDto updateCommentDto)
         {
-            await _postService.UpdateComment(updateCommentDto);
+            var a = User.Claims.FirstOrDefault(x => x.Type == "UserId").Value.ToString();
+            await _postService.UpdateComment(updateCommentDto,a);
             return Ok();
         }
 
@@ -75,7 +79,8 @@ namespace Final.Controllers
 
         public async Task<IActionResult> DeleteComment(int id)
         {
-            await _postService.DeleteComment(id);
+           var a = User.Claims.FirstOrDefault(x => x.Type == "UserId").Value.ToString();
+            await _postService.DeleteComment(id,a);
             return Ok();
         }
 

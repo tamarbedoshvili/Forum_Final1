@@ -50,13 +50,14 @@ namespace Final.Controllers
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
+            claims.Add(new Claim("UserId", user.Id));
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
                 _config["Jwt:Issuer"],
                 claims,
                 expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: credentials
+
             );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);

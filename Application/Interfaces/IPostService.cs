@@ -1,5 +1,6 @@
 ﻿using Final.Domain.Dto;
 using Final.Dto;
+using Final.Entities;
 
 namespace Final.Interfaces
 {
@@ -9,12 +10,12 @@ namespace Final.Interfaces
 
         public Task AddPost(AddPostDto post);
         public Task AddComment(AddCommentDto comment);
-        public Task UpdateComment(UpdateCommentDto comment);
+        public Task UpdateComment(UpdateCommentDto comment, string userId);
 
-        public Task DeletePost(int id);
-        public Task DeleteComment(int id);
+        public Task DeletePost(int id, string userId);
+        public Task DeleteComment(int id, string userId);
 
-        public Task UpdatePost(UpdatePostDto Post);
+        public Task UpdatePost(UpdatePostDto Post, string userId);
         public Task ChangPostStatus(ChangePostStatusDto Post);
         public Task ChangPostState(ChangePostStateDto Post);
 

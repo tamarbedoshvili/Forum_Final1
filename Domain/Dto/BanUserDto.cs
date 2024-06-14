@@ -5,6 +5,6 @@
 
         public string BanIssuerUserEmail { get; set; }
         public string BannedUserEmail { get; set; }
-        public bool Ban { get; set; }
+        
     }
 }
